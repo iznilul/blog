@@ -1,0 +1,290 @@
+# sdut-okr开发日志（七）主页开发
+
+[TOC]
+
+## 0x01 简介及开发技术栈
+
+因为实验室之前的主页有点年头了，而且由于多人开发所以功能也有点重叠，所以重新整合了一下
+
+开发框架：vue3
+
+构建工具：vite
+
+UI框架：element-plus
+
+动画库：aos，particles.vue3
+
+其他还用到了诸如less等
+
+github：https://github.com/iznilul/itlab_home
+
+## 0x02 整体布局
+
+```vue
+<AHeader @gotoPage="gotoPage"></AHeader>
+<AContent></AContent>
+<AFooter></AFooter>
+```
+
+封装BasicLayout组件，由页头内容页脚三部分组成
+
+AHeader页头就是菜单，点击，调用父组件注册的跳转方法，实现路由
+
+AFooter页脚就是一段话( ╯□╰ )
+
+AContent包含了当前路由内容和粒子动画效果
+
+三个部分都采取了position:fixed 相对定位
+
+```less
+#baseLayout{
+  height: 100%;
+  color: #000000;
+  position: relative;// 关键
+  box-sizing: border-box;
+  min-height:100%; // 关键
+  #header {
+    z-index: 2;
+    height: 60px;
+    position: fixed;// 关键
+    background: black;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+  #content{
+    height: 100%;
+    width: 100%;
+    //z-index: 0;
+    //background: black;
+    position: absolute;// 关键
+    top: 50px;
+    left: -8px;
+    right: 0;
+  }
+  #footer {
+    text-align: center;
+    overflow: auto;
+    background: black; //背景颜色，可以防止被覆盖
+    z-index: 1;
+    height: 30px;
+    position: fixed;// 关键
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+}
+```
+
+这样保证页面滚动时位置相对锁定，时刻能呈现这三个组件
+
+预览效果
+
+![http://image.radcircle.love/3b0605041b08497f83d1c24667b8513c](http://image.radcircle.love/3b0605041b08497f83d1c24667b8513c)
+
+## 0x03 页内导航和步骤条
+
+导航栏可以用a标签页内定位元素，实现导航
+
+```vue
+<el-tab-pane name="0" label="实验室介绍"><a href="#first">实验室介绍</a></el-tab-pane>
+<el-tab-pane name="1" label="欢迎加入"><a href="#second">欢迎加入</a></el-tab-pane>
+<el-tab-pane name="2" label="学习方向"><a href="#third">学习方向</a></el-tab-pane>
+```
+
+步骤栏要麻烦一些
+
+```vue
+<el-steps id="step" direction="vertical" :active="active-0">
+    <el-step title="实验室介绍"></el-step>
+    <el-step title="欢迎加入"></el-step>
+    <el-step title="学习方向"></el-step>
+    <el-step title="主要比赛"></el-step>
+    <el-step title="实验室照片"></el-step>
+    <el-step title="友情链接"></el-step>
+</el-steps>
+```
+
+首先在步骤栏的组件上绑定一个active属性，代表当前激活的是哪一个步骤
+
+```javascript
+const active=ref("");
+let actives=reactive({
+    "first":"0",
+    "second":"1",
+    "third":"2",
+    "fourth":"3",
+    "fifth":"4",
+    "sixth":"5"});
+```
+
+在setup函数里设置变量和id的对应关系
+
+```javascript
+let list=reactive(["first","second","third","fourth","fifth","sixth"]);
+const scrollHandle=(e)=>{
+                // 获取视窗高度
+                let domHeight = document.body.offsetHeight;
+                // dom滚动位置
+                let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+                // 获取监听元素
+                let id=null;
+                // 获取监听元素本身高度
+                let scrollHeight=null;
+                // 获取监听元素距离视窗顶部距离
+                let offsetTop=null;
+                // 获取监听元素距离顶部高度-窗口高度
+                let top=null;
+                // 元素距离底部的高度+元素本身高度
+                let bottom=null;
+                list.map((i) => {
+                    id = document.getElementById(i);
+                    scrollHeight = id.scrollHeight;
+                    // console.log("元素高度:"+scrollHeight)
+                    offsetTop = id.offsetTop;
+                    // console.log("元素绝对位置:"+offsetTop)
+                    top = offsetTop - domHeight > 0 ? offsetTop - domHeight : 0;
+                    // console.log("元素顶部:"+top)
+                    bottom = scrollHeight + offsetTop;
+                    // console.log("元素底部:"+bottom)
+                    // 页面滚动位置 > 元素距离顶部高度-窗口高度 && 页面滚动位置 < 元素距离顶部高度+元素本身高度
+                    if (scrollTop >= top && scrollTop <= bottom) {
+                        // console.log('元素出现在可视区: ' + i);
+                        active.value=actives[i]
+                    }
+                });
+            };
+            onMounted(()=>{
+                window.addEventListener("scroll",scrollHandle)
+            });
+            return{
+                active
+            }
+```
+
+编写一个判断当前可视页面处于哪个位置的函数，来计算active变量
+
+把这个函数注册到浏览器，监听到事件即可执行
+
+![http://image.radcircle.love/88a29c41a26e412ab331f0f8b98b020a](http://image.radcircle.love/88a29c41a26e412ab331f0f8b98b020a)
+
+## 0x04 移动端拒绝
+
+由于时间有限只开发完了web版本，移动端访问的话样式会有很大问题，所以干脆直接惯了移动端
+
+在app.vue中
+
+```javascript
+const isMobile=()=>{
+   let flag = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
+   return flag;
+}
+onMounted(()=>{
+   // console.log("isMobile",isMobile())
+   if(isMobile()){
+      ElMessageBox({
+         title:"设备错误",
+         message:"请在电脑网页版访问，手机移动端暂不支持",
+         showClose:false,
+         showConfirmButton:false,
+         closeOnClickModal:false,
+         closeOnPressEscape:false
+      });
+   }
+})
+```
+
+先判断用户是不是移动端访问，是的话直接返回一个不能关闭的提示框，让用户乖乖去web端
+
+![http://image.radcircle.love/7400f4615d8d4b5fb66f02013f102abc](http://image.radcircle.love/7400f4615d8d4b5fb66f02013f102abc)
+
+## 0x05防抖
+
+如果用户持续点击访问后端资源的按钮会给服务器和数据库带来很大压力，这里给axios加全局防抖功能，控制恶意访问
+
+```javascript
+// 正在进行中的请求列表
+let reqList = []
+/**
+ * 阻止重复请求
+ * @param {array} reqList - 请求缓存列表
+ * @param {string} url - 当前请求地址
+ * @param {function} cancel - 请求中断函数
+ * @param {string} errorMessage - 请求中断时需要显示的错误信息
+ */
+const stopRepeatRequest = function (reqList, url, cancel, errorMessage) {
+    const errorMsg = errorMessage || ''
+    for (let i = 0; i < reqList.length; i++) {
+        if (reqList[i] === url) {
+            console.log("重复请求,请求被中断")
+            cancel(errorMsg)
+            return
+        }
+    }
+    reqList.push(url)
+}
+
+/**
+ * 允许某个请求可以继续进行
+ * @param {array} reqList 全部请求列表
+ * @param {string} url 请求地址
+ */
+const allowRequest = function (reqList, url) {
+    for (let i = 0; i < reqList.length; i++) {
+        if (reqList[i] === url) {
+            reqList.splice(i, 1)
+            break
+        }
+    }
+}
+
+const service = axios.create({
+  baseURL: baseURL,
+  timeout: 6000,
+})
+
+service.interceptors.request.use(
+  (config) => {
+      let cancel
+      // 设置cancelToken对象
+      config.cancelToken = new axios.CancelToken((config)=> {
+          cancel = config
+      })
+      // 阻止重复请求。当上个请求未完成时，相同的请求不会进行
+      stopRepeatRequest(reqList, config.url, cancel, `已有相同请求，${config.url} 请求被中断`)
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
+
+service.interceptors.response.use(
+  (response) => {
+      // 增加延迟，相同请求不得在短时间内重复发送,在延迟时间内，由于请求列表还没有清除，相同的请求会在请求拦截器被拦截
+      setTimeout(() => {
+          allowRequest(reqList, response.config.url)
+      }, 1000)
+    // 正常，直接返回数据
+    return res
+  },
+  (error) => {
+      // 增加延迟，相同请求不得在短时间内重复发送,在延迟时间内，由于请求列表还没有清除，相同的请求会在请求拦截器被拦截
+      setTimeout(() => {
+          allowRequest(reqList, error.config.url)
+      }, 1000)
+    return Promise.reject(error)
+  }
+)
+```
+
+这样，发出去的请求会在全局请求队列中暂时保存，等到请求返回1000ms之后才可以再次发起请求，控制请求频率
+
+![http://image.radcircle.love/8c7390c6ee9541b1baf709886a6be8b0](http://image.radcircle.love/8c7390c6ee9541b1baf709886a6be8b0)
+
+## 0x06参考资料
+
+https://juejin.cn/post/6844903921706614791
+
+https://blog.csdn.net/weixin_48255917/article/details/110041031
+
