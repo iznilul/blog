@@ -1,4 +1,5 @@
 .idea
+.temp
 docs/.vuepress/dist
 node_modules
 package-lock.json

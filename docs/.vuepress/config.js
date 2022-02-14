@@ -1,8 +1,8 @@
 module.exports = {
   // 页面标题
-  title: 'VuePress Demo',
+  title: 'sdaf',
   // 网页描述
-  description: '一蓑烟雨、汪汪汪的个人站点',
+  description: '半径圆radCircle个人站点',
   head: [
     // 页面icon
     ['link', { rel: 'icon', href: '/icon.png' }]
@@ -30,23 +30,20 @@ module.exports = {
     nav: [
       { text: '前端面试之道',link: '/interview/'},
       { text: 'JavaScript书籍', items: [
-          { text: '你不知道的JavaScript(上)', link: '/books/你不知道的javascript上'}, 
+          { text: '你不知道的JavaScript(上)', link: '/books/你不知道的javascript上'},
           { text: '你不知道的JavaScript(中)', link: '/books/你不知道的javascript中'},
           { text: '你不知道的JavaScript(下)', link: '/books/你不知道的javascript下'}
         ]
       },
       { text: '数据结构和算法', link: '/algorithm/'},
-      { text: 'Vue.js', link: '/vue/'},
-      { text: 'Webpack',link: '/webpack/'},
-      { text: 'VuePress',link: '/vuepress/'},
       { text: '基础配置功能',link: '/common/'}
   ]},
   configureWebpack: {
     resolve: {
       // 静态资源的别名
       alias: {
-        '@vuepress': '../images/vuepress',
-        '@vue': '../images/vue'
+        // '@vuepress': '../images/vuepress',
+        // '@vue': '../images/vue'
       }
     }
   }
