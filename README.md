@@ -1,12 +1,12 @@
 ---
 home: true
-heroText: radCircle's blog
-tagline: A magical Wechat account
-heroImage: https://cdn.jsdelivr.net/gh/qqlcx5/figure-bed@v1.0.0/image/qc-play.png
-heroImageStyle: { maxWidth: '650px', width: '100%', display: block, margin: '1rem auto 1rem' }
+heroText: RadCircle's blog
+tagline: Hey bro. The internet allow us to connect in everywhere.
+heroImage: /logo.jpg
+heroImageStyle: {width: '30%', display: block, margin: '1rem auto 1rem' }
 isShowTitleInHome: false
 actionText: About me
-actionLink: /指南/01.介绍
+actionLink: /about/README.md
 
 features:
   - title: 前端有道交流群

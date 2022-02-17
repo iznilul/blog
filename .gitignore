@@ -3,7 +3,7 @@ node_modules
 dist
 theme1
 theme1.6.5
-
+.temp
 # local env files
 .env.local
 .env.*.local
