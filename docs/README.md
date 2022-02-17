@@ -1,16 +1,16 @@
 ---
 home: true
 lang: zh-CN
-heroText: VuePress Demo
+heroText: radCircle's blog
 heroImage: /logo.jpg
-actionText: 开始 →
-actionLink: /interview/
+actionText: enter
+actionLink: /notes/
 features:
 - title: A Blog
-  details: 专注写作前端博客，记录日常所得。
+  details: 码农技术分享，打工人日常心得
+- title: Content
+  details: 专注服务端，前端，分享工具与开源轮子  
 - title: For Me
-  details: 故九万里，则风斯在下矣，而后乃今培风；背负青天，而莫之夭阏者，而后乃今将图南。
-- title: For Interview
-  details: 广州，已入坑ღ( ´･ᴗ･` )比心
-footer: Copyright © 2019-present wangtunan
+  details: 我有像马桶般坚硬的心
+footer: Copyright © 2022-present iznilul
 ---
