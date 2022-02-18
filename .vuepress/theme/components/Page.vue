@@ -247,6 +247,7 @@ function flatten (items, res) {
   padding-bottom 2rem
   padding-right 14rem
   display block
+  //background: url('https://img-blog.csdnimg.cn/img_convert/6602d9cf3ab2ce79293484b2b871138f.gif') center/cover no-repeat
   .side-bar
     position fixed
     top 10rem

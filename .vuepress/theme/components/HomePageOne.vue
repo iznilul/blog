@@ -3,10 +3,10 @@
     <section class="main">
       <div>
         <img
-          v-if="$frontmatter.heroImage"
-          :style="heroImageStyle || {}"
-          :src="$withBase($frontmatter.heroImage)"
-          alt="hero" />
+            v-if="$frontmatter.heroImage"
+            :style="heroImageStyle || {}"
+            :src="$withBase($frontmatter.heroImage)"
+            alt="hero"/>
         <h1>{{ $frontmatter.heroText || $title }}</h1>
         <p class="description">{{ $description }}</p>
         <router-link class="btn-about" :to="$frontmatter.actionLink">{{ $frontmatter.actionText }}</router-link>
@@ -52,21 +52,19 @@
 </template>
 
 
-
-
 <script>
 export default {
-  data () {
+  data() {
     return {
       downloads: 0
     }
   },
 
   computed: {
-    features () {
+    features() {
       return this.$frontmatter.features
     },
-    heroImageStyle () {
+    heroImageStyle() {
       return this.$frontmatter.heroImageStyle || {
         maxHeight: '200px',
         margin: '6rem auto 1.5rem'
@@ -74,7 +72,7 @@ export default {
     }
   },
 
-  created () {
+  created() {
     // const date = new Date()
     // const year = date.getFullYear()
     // const mounth = date.getMonth() + 1
@@ -85,7 +83,7 @@ export default {
   },
 
   methods: {
-    toThousandslsFilter (num) {
+    toThousandslsFilter(num) {
       const numStr = String(num)
       if (numStr === '' || numStr == undefined) {
         return ''
@@ -97,13 +95,13 @@ export default {
       return orderPrice2
     },
 
-    npmPackageDownloads (packages, dateRange) {
+    npmPackageDownloads(packages, dateRange) {
       packages = this._handlePackages(packages)
       dateRange = this._handleDateRange(dateRange)
       return this._getDownloadsOfDateRange(packages, dateRange)
     },
 
-    async _getDownloadsOfDateRange (packages, dateRange) {
+    async _getDownloadsOfDateRange(packages, dateRange) {
       let downloads = 0
       if (Array.isArray(dateRange)) {
         let fetchPromise = []
@@ -121,9 +119,9 @@ export default {
       return downloads
     },
 
-    _fetch (packages, dateRange) {
+    _fetch(packages, dateRange) {
       const BASE_URI = 'https://api.npmjs.org/downloads/point/'
-      return new Promise ((resolve, reject) => {
+      return new Promise((resolve, reject) => {
         fetch(`${BASE_URI}${dateRange}/${packages}`).then(this._parseJSON).then(res => {
           resolve(res)
         }).catch(err => {
@@ -132,13 +130,13 @@ export default {
       })
     },
 
-    _parseJSON (response) {
+    _parseJSON(response) {
       return response.json()
     },
 
-    _handleDateRange (dateRange) {
+    _handleDateRange(dateRange) {
       const index = dateRange.indexOf(':')
-      if (index> -1) {
+      if (index > -1) {
         const dr = dateRange.split(':')
         const newDateRange = dr
         const YEAR = 365 * 24 * 60 * 60 * 1000
@@ -160,13 +158,13 @@ export default {
       return dateRange
     },
 
-    _getDate (date) {
+    _getDate(date) {
       const dateArr = date.split('-')
       dateArr[0] = Number(dateArr[0]) + 1
       return dateArr.join('-')
     },
 
-    _handlePackages (packages) {
+    _handlePackages(packages) {
       if (Array.isArray(packages)) {
         return `-,${packages.join(',')}`
       }
@@ -192,10 +190,10 @@ export default {
       height: calc(100vh - 3.4rem);
       overflow hidden
       text-align: center;
-      background: url('./images/bg.svg') center/cover no-repeat；
+      background: url('https://img-blog.csdnimg.cn/img_convert/6602d9cf3ab2ce79293484b2b871138f.gif') center / cover no-repeat；
 
       h1 {
-        font-weight:bold;
+        font-weight: bold;
         margin-top: 1rem;
         font-size 34px;
       }
@@ -203,7 +201,7 @@ export default {
       p {
         font-size 22px;
         margin-bottom: 2rem;
-  
+
       }
 
       .btn-about {
@@ -213,11 +211,11 @@ export default {
         background: $accentColor;
         color: #fff;
         font-size: 1.2rem;
-        font-weight:bold;
+        font-weight: bold;
 
-      &:hover {
-        background-color: lighten(#f5587b, 10%);
-      }
+        &:hover {
+          background-color: lighten(#f5587b, 10%);
+        }
       }
 
       .banner {
@@ -229,8 +227,9 @@ export default {
     &.wish {
       overflow: hidden;
 
-      &.yesterday, &.tomorrow {
-        background: var(--code-color);
+      &.yesterday, &.today, &.tomorrow {
+        //background: var(--code-color);
+        background: url('https://img-blog.csdnimg.cn/img_convert/6602d9cf3ab2ce79293484b2b871138f.gif') center / cover no-repeat;
       }
 
       .wish-inner {
@@ -278,6 +277,7 @@ export default {
         h1 {
           margin-top: 5rem;
         }
+
         .btn-about {
           font-size .9rem
         }
@@ -314,6 +314,7 @@ export default {
         h1 {
           margin-top: 5rem;
         }
+
         .btn-about {
           font-size .8rem
         }
