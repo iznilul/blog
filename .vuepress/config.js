@@ -29,11 +29,11 @@ module.exports = {
     // 最后更新时间
     lastUpdated: 'Last Updated',
     // 作者
-    author: '星野',
+    author: '半径圆',
     // 作者头像
     authorAvatar: 'https://cdn.jsdelivr.net/gh/qqlcx5/figure-bed@v1.0.0/image/star-field.png',
     // 项目开始时间
-    startYear: '2018',
+    startYear: '2022',
     // 简体中文
     locales: {
       '/': {
@@ -44,12 +44,12 @@ module.exports = {
      * valine 设置 (if you need valine comment )
      */
     // 使用valine的访问量检查
-    valineConfig: {
-      appId: '8anL6vW9QmMARyRYyxcp6JvF-gzGzoHsz', // your appId
-      appKey: 'PcK0E98cWGojnD9uVe43fev7', // your appKey
-      // 全局关闭评论
-      showComment: true,
-    },
+    // valineConfig: {
+    //   appId: '8anL6vW9QmMARyRYyxcp6JvF-gzGzoHsz', // your appId
+    //   appKey: 'PcK0E98cWGojnD9uVe43fev7', // your appKey
+    //   // 全局关闭评论
+    //   showComment: true,
+    // },
     noFoundPageByTencent: false,
   },
   themeConfig,

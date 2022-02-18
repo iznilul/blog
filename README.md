@@ -6,7 +6,7 @@ heroImage: /logo.jpg
 heroImageStyle: {width: '30%', display: block, margin: '1rem auto 1rem' }
 isShowTitleInHome: false
 actionText: About me
-actionLink: /about/README.md
+actionLink: /me/1.about
 
 features:
   - title: 前端有道交流群

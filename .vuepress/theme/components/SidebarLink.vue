@@ -23,7 +23,7 @@ export default {
     // use custom active class matching logic
     // due to edge case of paths ending with / + hash
     const selfActive = isActive($route, item.path)
-    // for sidebar: auto pages, a hash link should be active if one of its child
+    // for sidebar: auto pages, a hash link should be active if 2.章节21 of its child
     // matches
     const active = item.type === 'auto'
       ? selfActive || item.children.some(c => isActive($route, item.basePath + '#' + c.slug))
