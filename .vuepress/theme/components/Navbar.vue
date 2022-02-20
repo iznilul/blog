@@ -130,7 +130,7 @@ $navbar-horizontal-padding = 1.5rem
     padding-left 1.5rem
     box-sizing border-box
     white-space nowrap
-    font-size 0.9rem
+    font-size 1.1rem
     position absolute
     right $navbar-horizontal-padding
     top $navbar-vertical-padding

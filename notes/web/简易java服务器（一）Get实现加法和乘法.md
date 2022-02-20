@@ -1,0 +1,143 @@
+# 简易java服务器（一）Get实现加法和乘法
+
+[TOC]
+
+## 0x01前言
+
+为了更好的了解IO和socket网络编程，开一个小坑写一个java服务器，争取实现的tomcat部分功能
+
+项目地址;https://github.com/iznilul/java-httpServer
+
+ ## 0x02思路与实现
+
+
+
+```java
+public class httpServer implements Runnable{
+    private static int port=8080;
+    private ServerSocket serverSocket=null;
+
+    // 初始化，绑定服务器socket运行端口
+    private httpServer(){
+        try{
+            serverSocket = new ServerSocket(port);
+        }catch(Exception e){
+            System.out.println("httpServer occur an error while starting");
+        }
+        new Thread(this).start();
+        System.out.println("server is start");
+    }
+        public static void main(String[] args) throws Exception{
+        if(args.length==1){
+            port=Integer.parseInt(args[0]);
+        }else{
+            System.out.println("port 8080 start");
+        }
+        new httpServer();
+    }
+}
+```
+
+初步思路是主类实现Runnable接口，作为一个线程运行在8080号端口
+
+并给服务器准备一个socket用来监听客户端请求
+
+```java
+//服务器主线程
+@Override
+public void run(){
+    while(true){
+        try{
+            Socket client=null;
+            System.out.println("waiting for connect.....");
+            client=serverSocket.accept();//io操作堵塞，直到有浏览器线程访问8080端口
+            }catch(Exception e){
+                    System.out.println("httpServer occur an error while running");
+            }
+    }
+}catch (Exception e){
+    System.out.println("httpServer occur an error before connecting");
+}
+    }
+}
+```
+
+主线程服务就是新建一个客户端socket用来通信，服务器socket堵塞监听，直到有客户端访问本地的8080端口（暂时没有实现并发功能( ╯□╰ )）
+
+![http://image.radcircle.love/8ad6be409b814f9eabfb9308158bb92c](http://image.radcircle.love/8ad6be409b814f9eabfb9308158bb92c)
+
+浏览器发起请求，线程从堵塞状态转换成运行状态，client套接字建立
+
+```java
+String line=in.readLine();
+String method=line.substring(line.indexOf("/")+1,line.indexOf("?"));
+String partA =
+        line.substring(line.indexOf("?") + 1, line.indexOf("&"));
+String partB = line.substring(line.indexOf("&")+1,line.indexOf("H")-1);
+String a = partA.substring(partA.indexOf("=")+1);
+String b = partB.substring(partB.indexOf("=")+1);
+```
+
+读取请求行，确定请求类型和请求参数，进行截取
+
+![http://image.radcircle.love/dfe4da4750df47e68c2f3c032fc19aff](http://image.radcircle.love/dfe4da4750df47e68c2f3c032fc19aff)
+
+![http://image.radcircle.love/38e42446e2dd40988eb1958b96ccf89e](http://image.radcircle.love/38e42446e2dd40988eb1958b96ccf89e)
+
+```java
+if(method.equals("add")){
+    output(client,add(a,b));
+}
+else if(method.equals("mult")){
+    output(client,multiple(a,b));
+}
+else{
+    output(client,wrongPattern());
+}
+```
+
+```java
+private String add(String a,String b) {
+    int sum=Integer.parseInt(a)+Integer.parseInt(b);
+    return "The result of "+a+" + "+b+" is "+String.valueOf(sum);
+}
+
+private String multiple(String a,String b){
+    int sum=Integer.parseInt(a)*Integer.parseInt(b);
+    return "The result of "+a+" * "+b+" is "+String.valueOf(sum);
+}
+
+private String wrongPattern(){
+    return "maybe the the url pattern is wrong";
+}
+
+//设置返回头刷新输出
+private void output(Socket client,String result) throws IOException {
+    BufferedWriter out=new BufferedWriter(new OutputStreamWriter(
+            client.getOutputStream()));
+    String header="HTTP/1.0 200 OK\r\n"+
+            "Content-length: "+result.length()+"\r\n"+
+            "Content-type: text/plain\r\n\r\n";
+    out.write(header);
+    out.write(result);
+    out.flush();
+    out.close();
+}
+```
+
+根据不同的参数运行不同的方法，返沪方法记得要返回要封装返回头和返回行
+
+![http://image.radcircle.love/857c709c72134746941fc82f67b37c5d](http://image.radcircle.love/857c709c72134746941fc82f67b37c5d)
+
+得到返回结果，因为操作比较简单，就不展示了( ╯□╰ )
+
+## 0x03参考资料
+
+目前还是很简单的一些功能，打算接下来继续慢慢维护，增添功能
+
+https://blog.cugxuan.cn/2017/07/20/Java/java%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84http%E6%9C%8D%E5%8A%A1%E5%99%A8/
+
+
+
+
+

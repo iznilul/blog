@@ -1,0 +1,135 @@
+# WireShark分析HTTP长连接和短连接
+
+[TOC]
+
+
+
+## 0x01 关于长连接和短连接
+
+HTTP基于TCP，是一种应用于应用层的无状态的传输协议。
+
+HTTP的无状态：协议永远都是客户端发起请求，服务器回送响应。每次连接只处理一个请求，当服务器返回本次请求的应答后便立即关闭连接（TCP四次挥手），下次请求客户端再重新建立连接。也就无法实现在客户端没有发起请求的时候，服务器主动将消息推送给客户端。
+
+无状态会导致客户端的每次请求都需要重新建立TCP连接，接受到服务端响应后，断开TCP连接。对于每次建立、断开TCP连接，还是有相当的性能损耗的
+
+为了减少这种损耗引入了**keep-alive**机制。http1.0默认是关闭的，通过http请求头设置“connection: keep-alive”进行开启；http1.1中默认开启，通过http请求头设置“connection: close”关闭。
+
+**keep-alive**机制：若开启后，在一次http请求中，服务器进行响应后，不再直接断开TCP连接，而是将TCP连接维持一段时间。在这段时间内，如果同一客户端再次向服务端发起http请求，便可以复用此TCP连接，向服务端发起请求，并重置timeout时间计数器，在接下来一段时间内还可以继续复用。这样无疑省略了反复创建和销毁TCP连接的损耗。
+
+keep-alive机制的启用把http分为了长连接和短连接，这次用抓包工具wireshark+tcpdump分析http的长连接和短连接
+
+## 0x02 准备工具
+
+需要用到的工具:**linux操作系统，python脚本,tupdump,wireshark抓包,nginx监听,postman测试接口（可用浏览器）**
+
+wireshark的安装参考教程：https://www.jianshu.com/p/07f942839d9f
+
+准备一下服务器nginx的配置，测试监听端口8081，keep-alive 连接时间5s
+
+```nginx
+worker_processes  2;
+error_log logs/error.log;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    server {
+        listen 8081;
+        location / {
+            return 200 "keep-alive test\n";
+        }
+    }
+    keepalive_timeout  5s;
+}
+```
+
+postman测试通信，ok有回复
+
+![img](http://image.radcircle.love/87de3d7a68854302a47e9a533c825cf0)
+
+本地测试脚本：
+
+```python
+import requests
+import time
+
+session = requests.Session()
+url = "http://cloudwork:8081/httptest" #配置自己的ip地址，本地用127.0.0.1
+res = session.get(url)
+print(res,res.text)
+time.sleep(2)
+res = session.get(url)
+print(res,res.text)
+time.sleep(6)
+res = session.get(url)
+print(res,res.text)
+time.sleep(8)
+```
+
+用request.session 向服务器发送请求，第一次间隔2s，小于5s，不用三次握手，第二次间隔6s，超过了5s，所以重新三次握手建立连接，第三次间隔8s是为了让服务器主动释放连接，如果不设立第三次睡眠或者睡眠小于5s则是客户端先请求断开
+
+tcpdump在linux上装好就行啦=v=
+
+## 0x03 分析
+
+### 启动环境
+
+linux 运行命令,启动tcpdump -i 后面是监听网卡 port 监听端口 -w 转存文件，一会到wireshark下分析（转存的文件会直接保存到当前目录下）
+
+`tcpdump -i ens5 port 8081 -w httptest.pcap`
+
+然后运行python脚本
+
+![img](http://image.radcircle.love/50fef402d99d42d4a2b468c1ab8ab3a2)
+
+等到python运行完毕，ctrl+c退出tcpdump
+
+![img](http://image.radcircle.love/33fef59b57294256ba050817a0def4a7)
+
+在linux可以看到当前有了转存文件，把它移动到本地目录下用wireshark进行分析
+
+![img](http://image.radcircle.love/8b1b231ef03b490492b2bbec064b23cb)
+
+根据python进行逐步分析过程
+
+![img](http://image.radcircle.love/5c08ca3936cb4f1bb56e23ea23396bbc)
+
+### 第一次请求返回
+
+![img](http://image.radcircle.love/2371e485239647a79d7f600781117c82)
+
+序号1-7的整个过程是第一次请求返回的过程，时间一共花了半秒左右
+
+1-3三次握手，4-5发送请求，6-7服务器返回
+
+能从序号七的data里看到设定的返回值
+
+![img](http://image.radcircle.love/b58f0ed53018484da52e306e309f9862)
+
+### 第二次请求返回
+
+![http://image.radcircle.love/634741fcccf042cfb40a491813044b80](http://image.radcircle.love/634741fcccf042cfb40a491813044b80)
+
+序号8-15是第二次返回的过程，由于第一次返回到第二次请求之间只隔了2s，所以这次请求时http还在keep-alive中，长连接仍然在保持，不需要三次握手
+
+不过由于下一次请求之间隔了6s，所以在序号12的时候，也就是第七秒到了keep-alive的最大保持时间5s，挥手断开连接
+
+![http://image.radcircle.love/582de6367c7f4b3289fce18f7237637a](http://image.radcircle.love/582de6367c7f4b3289fce18f7237637a)
+
+注意，是服务器主动向客户端断开连接
+
+### 第三次请求返回
+
+![http://image.radcircle.love/b668d829783049a0bde81c4e0a00ebcc](http://image.radcircle.love/b668d829783049a0bde81c4e0a00ebcc)
+
+序号16-26，因为长连接已经断开，所以需要重新进行三次握手，完成这个请求返回之后由于客户端又休眠了8s，所以四次挥手再次断开，有了前面的经验这次就比较好分析了
+
+## 0x04参考文章
+
+借这个机会学习一下http keep-alive还有抓包工具，和大家分享，最近会继续看一下TCP的长连接与HTTP长连接的不同
+
+https://zhuanlan.zhihu.com/p/224595048
+
+https://zhuanlan.zhihu.com/p/84700638

@@ -3,33 +3,25 @@ const utilsRoot = path.join(__dirname, '..', 'utils');
 const docsRoot = path.join(__dirname, '..', '..');
 const readFile = require(utilsRoot + '/readFile');
 
-const java = [{
-    title: 'Java',
-    collapsable: true,
-    children: readFile(docsRoot + '/notes/java')
-}]
+const java = readFile(docsRoot + '/notes/java')
+const algorithm = readFile(docsRoot + '/notes/algorithm')
+const books = readFile(docsRoot + '/notes/books')
+const mq = readFile(docsRoot + '/notes/mq')
+const network = readFile(docsRoot + '/notes/network')
+const os = readFile(docsRoot + '/notes/os')
+const web = readFile(docsRoot + '/notes/web')
 
-const javascript = [{
-    title: 'JavaScript',
-    collapsable: true,
-    children: readFile(docsRoot + '/notes/javascript')
-}]
-
-const projects = [{
-    title: '开源项目',
-    collapsable: true,
-    children: readFile(docsRoot + '/projects')
-}]
+const projects = readFile(docsRoot + '/projects')
 
 const essay = [{
     title: '日常随笔',
-    collapsable: true,
+    collapsible: true,
     children: readFile(docsRoot + '/essay')
 }]
 
 const me = [{
     title: '关于我',
-    collapsable: false,
+    collapsible: false,
     children: readFile(docsRoot + '/me')
 }]
 
@@ -65,7 +57,7 @@ const themeConfig = {
 
     smoothScroll: true,
     markdown: {
-      lineNumbers: true
+        lineNumbers: true
     },
     blogConfig: {
         tag: {
@@ -75,47 +67,72 @@ const themeConfig = {
     },
     nav: [
         {
-          text:"首页",
-          link:"/",
-          icon:"reco-home"
+            text: "首页",
+            link: "/",
+            icon: "reco-home"
         },
         {
             text: '笔记',
-            icon:'reco-category',
+            icon: 'reco-category',
             items: [
                 {
-                    text: "java",
-                    link:"/notes/java/1.about"
+                    text: "Java",
+                    link: "/notes/java/1.about"
                 },
                 {
-                    text: "javascript",
-                    link:"/notes/javascript/1.about"
-                }
+                    text: "web开发",
+                    link: "/notes/web/1.about"
+                },
+                {
+                    text: "网络",
+                    link: "/notes/network/1.about"
+                },
+                {
+                    text: "数据结构与算法",
+                    link: "/notes/algorithm/1.about"
+                },
+                {
+                    text: "消息队列",
+                    link: "/notes/mq/1.about"
+                },
+                {
+                    text: "操作系统",
+                    link: "/notes/os/1.about"
+                },
+                {
+                    text: "书籍分享",
+                    link: "/notes/books/1.about"
+                },
             ]
         }, {
             text: '开源项目',
             link: '/projects/1.about',
-            icon:'reco-coding'
+            icon: 'reco-coding'
         },
         {
             text: '随笔',
             link: '/essay/1.about',
-            icon:'reco-document'
+            icon: 'reco-document'
         },
         {
             text: '关于我',
             link: '/me/1.about',
-            icon:'reco-eye'
+            icon: 'reco-eye'
         },
 
     ],
 
     sidebar: {
         '/notes/java/': java,
-        '/notes/javascript/': javascript,
-        '/projects/':projects,
-        '/essay/':essay,
-        '/me/':me
+        '/notes/web/': web,
+        '/notes/network/': network,
+        '/notes/algorithm/': algorithm,
+        '/notes/mq/': mq,
+        '/notes/os/': os,
+        '/notes/books/': books,
+        '/projects/': projects,
+        '/essay/': essay,
+        '/me/': me
     },
 };
 
