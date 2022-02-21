@@ -19,7 +19,7 @@ vim是常用的修改配置文件用的命令
 
 `vim xxx` 进入浏览模式
 
-![img](http://image.radcircle.love/bdcef9d595874ceda7d09ec89f670e0a)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645446697669.png)
 
 i:来回切换insert/浏览模式，insert模式可以修改内容，
 
@@ -45,7 +45,7 @@ i:来回切换insert/浏览模式，insert模式可以修改内容，
 
 -i 忽略大小写
 
-![img](http://image.radcircle.love/f27af52b2fdc48d6aaad38f47d451e8f)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645446698354.png)
 
 ### more
 
@@ -79,7 +79,7 @@ tail会直接访问文件的尾部，常用来查看更新的日志
 
 -f 全格式显示进程
 
-![img](http://image.radcircle.love/12c2bc75ac1b4377938b11e5cfeb39c7)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645446700328.png)
 
 USER，用户名称；
 
@@ -119,7 +119,6 @@ netstat显示网络连接，路由表和网络接口信息
 
 -p 显示正在使用Socket的程序识别码和程序名称。
 
-![img](http://image.radcircle.love/12c2bc75ac1b4377938b11e5cfeb39c7)
 
 ### df
 
@@ -127,7 +126,7 @@ df命令查看磁盘使用情况
 
 -h 用MB/GB为单位显示
 
-![img](http://image.radcircle.love/11cb8e7ace6448348d19083270a587c1)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645446704931.png)
 
 ### free
 
@@ -135,13 +134,13 @@ free 用来查看内存使用情况
 
 -h 用MB/GB为单位显示
 
-![img](http://image.radcircle.love/2bc790f9a6294381bbcf7423ac0e239f)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645446706519.png)![img](http://image.radcircle.love/2bc790f9a6294381bbcf7423ac0e239f)
 
 ### top
 
 top命令用来综合查看服务器的性能问题
 
-![img](http://image.radcircle.love/ca9bea12fc7b4265a244ffe37adbb92c)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645446702163.png)
 
 **第一行**，**任务队列信息**
 
@@ -225,7 +224,7 @@ COMMAND — 进程名称（命令名/命令行）
 
 可以用alias 自定义命令存入环境变量
 
-![img](http://image.radcircle.love/bdcef9d595874ceda7d09ec89f670e0a)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645446697669.png)
 
 
 

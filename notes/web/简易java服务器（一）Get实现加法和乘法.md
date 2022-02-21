@@ -6,7 +6,7 @@
 
 为了更好的了解IO和socket网络编程，开一个小坑写一个java服务器，争取实现的tomcat部分功能
 
-项目地址;https://github.com/iznilul/java-httpServer
+[github](https://github.com/iznilul/java-httpServer)
 
  ## 0x02思路与实现
 
@@ -64,7 +64,7 @@ public void run(){
 
 主线程服务就是新建一个客户端socket用来通信，服务器socket堵塞监听，直到有客户端访问本地的8080端口（暂时没有实现并发功能( ╯□╰ )）
 
-![http://image.radcircle.love/8ad6be409b814f9eabfb9308158bb92c](http://image.radcircle.love/8ad6be409b814f9eabfb9308158bb92c)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645446077366.png)
 
 浏览器发起请求，线程从堵塞状态转换成运行状态，client套接字建立
 
@@ -80,9 +80,9 @@ String b = partB.substring(partB.indexOf("=")+1);
 
 读取请求行，确定请求类型和请求参数，进行截取
 
-![http://image.radcircle.love/dfe4da4750df47e68c2f3c032fc19aff](http://image.radcircle.love/dfe4da4750df47e68c2f3c032fc19aff)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645446079845.png)
 
-![http://image.radcircle.love/38e42446e2dd40988eb1958b96ccf89e](http://image.radcircle.love/38e42446e2dd40988eb1958b96ccf89e)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645446080343.png)
 
 ```java
 if(method.equals("add")){
@@ -127,7 +127,7 @@ private void output(Socket client,String result) throws IOException {
 
 根据不同的参数运行不同的方法，返沪方法记得要返回要封装返回头和返回行
 
-![http://image.radcircle.love/857c709c72134746941fc82f67b37c5d](http://image.radcircle.love/857c709c72134746941fc82f67b37c5d)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645446082955.png)
 
 得到返回结果，因为操作比较简单，就不展示了( ╯□╰ )
 

@@ -32,29 +32,29 @@ kafka在业务逻辑上做到了“并行转串行，同步转异步”,能节�
 
 每一个步骤都需要得到前一级的相应，堵塞执行，总共耗时150ms
 
-![http://image.radcircle.love/e0e56c006af04687a66bec5e1b919d6e](http://image.radcircle.love/e0e56c006af04687a66bec5e1b919d6e)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645445749271.png)
 
 并行方式：将注册信息写入数据库成功后，发送注册邮件的同时，发送注册短信。以上三个任务完成后，返回给客户端。与串行的差别是，并行的方式可以提高处理的时间
 
 注册邮件和注册短信之间不需要互相等待，不过都需要等待信息写入数据库的相应，总共耗时100ms
 
-![http://image.radcircle.love/543311a74d0c43ccb42f8b9465521f81](http://image.radcircle.love/543311a74d0c43ccb42f8b9465521f81)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645445751271.png)
 
 
 
 按照以上约定，用户的响应时间其实只取决于注册信息写入数据库这一步。注册邮件，发送短信这种消息可以直接写入消息队列后返回，不用在等待这两个事件的返回，让他们去异步读取，因此用户的响应时间可能是50毫秒。因此架构改变后，系统的吞吐量提高到每秒20 QPS。比串行提高了3倍，比并行提高了两倍
 
-![http://image.radcircle.love/dcf3ea50e30743619c66c9338d8de062](http://image.radcircle.love/dcf3ea50e30743619c66c9338d8de062)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645445753155.png)
 
 ### 模块解耦
 
-![http://image.radcircle.love/a218b657385a4ebe8834a755ac892c27](http://image.radcircle.love/a218b657385a4ebe8834a755ac892c27)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645445756328.png)
 
 继续套用原博客的图orz（原谅我不会作图），那电商的下单来说，传统的业务模式是在订单系统的代码中内嵌一行调用库存接口的代码
 
 这样的话，如果在库存系统的代码执行时出现错误，会导致订单也失败，模块耦合度太大
 
-![http://image.radcircle.love/4b5ff9fcf4364b5caad73d8fc20ec8f9](http://image.radcircle.love/4b5ff9fcf4364b5caad73d8fc20ec8f9)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645445758493.png)
 
 套用消息队列后，订单系统可以直接把这个消息丢到队列中就不管了，快速返回给用户下单结果
 
@@ -62,7 +62,7 @@ kafka在业务逻辑上做到了“并行转串行，同步转异步”,能节�
 
 ### 分担流量
 
-![](https://pic1.zhimg.com/v2-f6b6515c6510f0cb96fcd69821402408_b.jpg)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645445764218.jpg)
 
 在高流量情况下，比如秒杀活动，大规模的用户请求打到某个模块应用上，如果加上处理请求的业务逻辑在返回，高并发很容易导致应用达到性能瓶颈挂掉。
 
@@ -70,7 +70,7 @@ kafka在业务逻辑上做到了“并行转串行，同步转异步”,能节�
 
 ### 日志处理
 
-![http://image.radcircle.love/085881eab9a940329a5b3c8e7bb9f104](http://image.radcircle.love/085881eab9a940329a5b3c8e7bb9f104)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645445760718.png)
 
 日志文件一般都是大量的，一次性传输的话容易造成系统堵塞，kafka可以作为一个中间件存储，日志采集的应用定时往队列写入日志消息，日志处理应用拉取消息处理分析，良好的实时性处理节省时间成本
 
@@ -78,7 +78,7 @@ kafka在业务逻辑上做到了“并行转串行，同步转异步”,能节�
 
 ### 消息通讯
 
-![http://image.radcircle.love/6045827e8e764955be1a0beea0ee27cc](http://image.radcircle.love/6045827e8e764955be1a0beea0ee27cc)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645445762739.png)
 
 kafka具备实时性消息传输，客户端可以通过订阅同一个消息队列的同一主题可以达到聊天室的效果
 

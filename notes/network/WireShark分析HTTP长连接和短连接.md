@@ -47,7 +47,7 @@ http {
 
 postman测试通信，ok有回复
 
-![img](http://image.radcircle.love/87de3d7a68854302a47e9a533c825cf0)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645447350193.png)
 
 本地测试脚本：
 
@@ -82,23 +82,23 @@ linux 运行命令,启动tcpdump -i 后面是监听网卡 port 监听端口 -w �
 
 然后运行python脚本
 
-![img](http://image.radcircle.love/50fef402d99d42d4a2b468c1ab8ab3a2)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645447353163.png)
 
 等到python运行完毕，ctrl+c退出tcpdump
 
-![img](http://image.radcircle.love/33fef59b57294256ba050817a0def4a7)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645447352679.png)
 
 在linux可以看到当前有了转存文件，把它移动到本地目录下用wireshark进行分析
 
-![img](http://image.radcircle.love/8b1b231ef03b490492b2bbec064b23cb)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645447355741.png)
 
 根据python进行逐步分析过程
 
-![img](http://image.radcircle.love/5c08ca3936cb4f1bb56e23ea23396bbc)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645447356386.png)
 
 ### 第一次请求返回
 
-![img](http://image.radcircle.love/2371e485239647a79d7f600781117c82)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645447358993.png)
 
 序号1-7的整个过程是第一次请求返回的过程，时间一共花了半秒左右
 
@@ -106,23 +106,23 @@ linux 运行命令,启动tcpdump -i 后面是监听网卡 port 监听端口 -w �
 
 能从序号七的data里看到设定的返回值
 
-![img](http://image.radcircle.love/b58f0ed53018484da52e306e309f9862)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645447360715.png)
 
 ### 第二次请求返回
 
-![http://image.radcircle.love/634741fcccf042cfb40a491813044b80](http://image.radcircle.love/634741fcccf042cfb40a491813044b80)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645447361314.png)
 
 序号8-15是第二次返回的过程，由于第一次返回到第二次请求之间只隔了2s，所以这次请求时http还在keep-alive中，长连接仍然在保持，不需要三次握手
 
 不过由于下一次请求之间隔了6s，所以在序号12的时候，也就是第七秒到了keep-alive的最大保持时间5s，挥手断开连接
 
-![http://image.radcircle.love/582de6367c7f4b3289fce18f7237637a](http://image.radcircle.love/582de6367c7f4b3289fce18f7237637a)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645447363888.png)
 
 注意，是服务器主动向客户端断开连接
 
 ### 第三次请求返回
 
-![http://image.radcircle.love/b668d829783049a0bde81c4e0a00ebcc](http://image.radcircle.love/b668d829783049a0bde81c4e0a00ebcc)
+![](https://cdn.jsdelivr.net/gh/iznilul/img/1645447365462.png)
 
 序号16-26，因为长连接已经断开，所以需要重新进行三次握手，完成这个请求返回之后由于客户端又休眠了8s，所以四次挥手再次断开，有了前面的经验这次就比较好分析了
 
