@@ -47,7 +47,7 @@ export default defineComponent({
     background: #fff;
     color: #fff;
     line-height 13px
-    font-size: 13px;
+    font-size: 17px;
     box-shadow var(--box-shadow)
     transition: all .5s
     &:hover
